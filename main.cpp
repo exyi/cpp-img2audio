@@ -16,10 +16,12 @@ void fucking_print_vector_as_this_shit_cant_do_it_on_its_own(ostream& o, const v
 int main() {
     srand(time(NULL));
 
-    let length_secs = 280;
+    let output = "outputfile.wav";
+
+    let length_secs = 280.0;
     let samplerate = 48000;
-    let max_frequency = 15000;
-    let min_frequency = 13500;
+    let max_frequency = 15000.0;
+    let min_frequency = 13500.0;
     let sconfig = SoundConfig(
         length_secs,
         samplerate,
@@ -43,6 +45,6 @@ int main() {
     let sounds = draw_lines(lines, sconfig);
     auto output_buffer = mix_into_one(sounds, samplerate);
     // compress_sound(bf);
-    save_waveform("outputfile.wav", output_buffer.buffer, samplerate);
+    save_waveform(output, output_buffer.buffer, samplerate);
     return 0;
 }

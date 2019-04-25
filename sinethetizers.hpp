@@ -61,17 +61,7 @@ SoundBuffer generate_wavespectrum_(f32 min, f32 max, F frequency_amplitude, u32 
     };
 
     // cerr << "wavespectrum: " << samplerate << " " << samplecount << "\n";
-    f32 last_freq = 0;
-    f32 last_ampl = 0;
-    f32 next_freq = 0;
-    f32 next_ampl = 0;
-    u32 next_freq_index = 0;
-    let peak_index = samplecount / 8;
     let fft_freqs = CREATE_VEC(f64, i, samplecount, get_ampl(i) * 10);
-
-    // fft_freqs[peak_index] = samplecount/2;
-    // fft_freqs[peak_index / 2] = samplecount/2;
-    // fft_freqs[fft_freqs.size() - peak_index] = samplecount;
 
     let raw_result = ifft_real_random_phase(fft_freqs);
     MUTABLE_LET_BECAUSE_CPP_COMMITTEE_ARE_IDIOTS_AND_WE_CANT_MOVE_CONST_VARS
@@ -80,37 +70,22 @@ SoundBuffer generate_wavespectrum_(f32 min, f32 max, F frequency_amplitude, u32 
 }
 
 template<typename F>
-SoundBuffer generate_wavespectrum(f32 min, f32 max, F frequency_amplitude, i32 samplerate, f32 length) {
+SoundBuffer generate_wavespectrum(f32 min, f32 max, F frequency_amplitude, i32 samplerate) {
     let fragment_len = 1024;
-    MUTABLE_LET_BECAUSE_CPP_COMMITTEE_ARE_IDIOTS_AND_WE_CANT_MOVE_CONST_VARS fragment = generate_wavespectrum_(min, max, frequency_amplitude, samplerate, fragment_len).to_fragment(0);
+    MUTABLE_LET_BECAUSE_CPP_COMMITTEE_ARE_IDIOTS_AND_WE_CANT_MOVE_CONST_VARS fragment =
+        generate_wavespectrum_(min, max, frequency_amplitude, samplerate, fragment_len);
 
-    let count = 1;//(i32)(length * samplerate / fragment_len);
+    return fragment;
+
+    // let count = (i32)(length * samplerate / fragment_len);
     // cerr << "Spectrum: iterate " << count <<"\n";
-    MUTABLE_LET_BECAUSE_CPP_COMMITTEE_ARE_IDIOTS_AND_WE_CANT_MOVE_CONST_VARS
+    // MUTABLE_LET_BECAUSE_CPP_COMMITTEE_ARE_IDIOTS_AND_WE_CANT_MOVE_CONST_VARS
         // fragments = vec_init(count, [&](let i) {
         //                 return fragment.move_start((f32)i * fragment_len / samplerate);
         //             });
-        fragments = make_vector(move(fragment));
-    return mix_into_one(MixedSounds(move(fragments)), samplerate);
+    //     fragments = make_vector(move(fragment));
+    // return mix_into_one(MixedSounds(move(fragments)), samplerate);
 }
-
-// template<typename F>
-// SoundBuffer generate_wavespectrum(f32 min, f32 max, F frequency_amplitude, i32 samplerate, f32 length) {
-//     let density = 15.0 / 1000.0; // 15 sinewaves per kilohertz seems good
-//     let count = (i32)(1 + (max - min) * density);
-//     // cerr << "Spectrum: iterate " << count <<"\n";
-
-//     // start-shift moves the begining of each sinewave by a tiny bit to prevent synchronized interference that leads to sudden peaks
-//     let start_shift = 0.05;
-
-//     MUTABLE_LET_BECAUSE_CPP_COMMITTEE_ARE_IDIOTS_AND_WE_CANT_MOVE_CONST_VARS fragments =
-//         vec_init(count, [&](let i) {
-//             let progress = ((f64)i / count);
-//             let freq = progress * (max - min) + min;
-//             return sinewave(freq, samplerate, length, 0).to_fragment(progress * start_shift);
-//         });
-//     return mix_into_one(MixedSounds(move(fragments)), samplerate);
-// }
 
 struct SoundConfig {
     f32 length;
@@ -131,7 +106,7 @@ SoundFragment draw_vert_line(const Line& normLine, const SoundConfig& sconfig) {
     let min_f = min(freq1, freq2);
     let max_f = max(freq1, freq2);
     return
-        generate_wavespectrum(min_f, max_f, [](let& f) { return 1; }, sconfig.sample_rate, 0.1)
+        generate_wavespectrum(min_f, max_f, [](let&) { return 1; }, sconfig.sample_rate)
         .to_fragment(sound_start)
         .normalize_volume(3.0);
 }

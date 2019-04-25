@@ -86,7 +86,6 @@ SoundBuffer mix_into_one(const MixedSounds& buffers, const i32 sample_rate) {
         // remove from the queue
         while (q.size() > 0 && end_time(buffers.sounds.at(q.top())) < start)
         {
-            let& fragment = buffers.sounds.at(q.top());
             current_volume -= max_volumes.at(q.top());
             q.pop();
         }
