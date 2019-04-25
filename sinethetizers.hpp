@@ -41,7 +41,7 @@ SoundBuffer sinewave(f32 freq, i32 samplerate, f32 length, f32 freq_increase) {
 
 template<typename F>
 SoundBuffer generate_wavespectrum_(f32 min, f32 max, F frequency_amplitude, u32 samplerate, usize samplecount) {
-    cerr <<"Wavespectrum " << min << "-" << max <<"\n";
+    // cerr <<"Wavespectrum " << min << "-" << max <<"\n";
 
     let window_function = make_window((f32)samplecount * 2 / samplerate);
 
@@ -99,7 +99,7 @@ struct SoundConfig {
 };
 
 SoundFragment draw_vert_line(const Line& normLine, const SoundConfig& sconfig) {
-    cerr << "Vert line\n";
+    // cerr << "Vert line\n";
     let sound_start = sconfig.length * normLine.from.x;
     let freq1 = normLine.from.y * (sconfig.max_frequency - sconfig.min_frequency) + sconfig.min_frequency;
     let freq2 = normLine.to.y * (sconfig.max_frequency - sconfig.min_frequency) + sconfig.min_frequency;
