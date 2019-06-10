@@ -5,14 +5,14 @@
 #include "soundobjects.hpp"
 
 auto make_window(f32 length) {
-    let window_function = [=](f32 pos) -> f32 {
+    let window_function = [=](f32 pos) {
         // cerr << pos << " of " << length << "\n";
         if (pos < 0.03)
-            return sin(pos / 0.03 * M_PI / 2);
-        else if (pos > length - 0.03)
-            return -sin((length - pos) / 0.03 * M_PI / 2);
+            return sinf(pos / 0.03F * M_PIf32 / 2.0F);
+        else if (pos > length - 0.03F)
+            return -sinf((length - pos) / 0.03F * M_PIf32 / 2.0F);
         else
-            return 1.0;
+            return 1.0f;
     };
     return window_function;
 }
