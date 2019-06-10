@@ -4,9 +4,7 @@
 
 vector<Line> single_letter2lines(char c) {
     c = toupper(c);
-    if (c == ' ') {
-        return vector<Line>();
-    } else if (c == 'A') {
+    if (c == 'A') {
         return make_vector(
             Line(Point(0, 0), Point(0.5, 1)),
             Line(Point(0.5, 1), Point(1, 0)),
@@ -206,7 +204,9 @@ vector<Line> single_letter2lines(char c) {
         );
     }
 
-    else if (c == ',') {
+    else if (c == ' ') {
+        return vector<Line>();
+    } else if (c == ',') {
         return make_vector(
             Line(Point(0.1, 0.1), Point(0, -0.1))
         );
