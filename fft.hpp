@@ -24,7 +24,7 @@ auto fft_complex(vector<complex<f64>> p, complex<f64> omega) {
     if (p.size() == 1)
         return p;
     if (p.size() % 2 == 1)
-        throw "";
+        throw runtime_error("FFT expects the p.size() to be a power of 2.");
 
     let ss = fft_complex(vector_stride(p, 0, 2), pow(omega, 2));
     let ls = fft_complex(vector_stride(p, 1, 2), pow(omega, 2));

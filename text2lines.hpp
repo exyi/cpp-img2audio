@@ -214,7 +214,7 @@ vector<Line> single_letter2lines(char c) {
         return make_vector(
             Line(Point(0, 0), Point(0.1, 0))
         );
-    } else throw "Not supported letter";
+    } else throw runtime_error("Not supported character");
 }
 
 vector<Line> string2lines(const string_view& str, f32 size) {

@@ -20,9 +20,8 @@ struct SoundFragment {
     f32 volume;
 
     SoundFragment(shared_ptr<SoundBuffer> buffer, f32 start_time, f32 volume = 1.0) : buffer{move(buffer)}, start_time{start_time}, volume{volume} {
-        if (this->buffer->buffer.size() == 0) throw "WTF, this throw always SegFaults... Whatever, it guards anyway.";
+        if (this->buffer->buffer.size() == 0) throw runtime_error("SoundBuffer must be non-empty");
         //     ^ explicit use of this pointer since buffer is the parameter that is destroyed by move. Thank you C++ for your help in programming, I appreciate the intuitive error message (SIGSEGV)
-        //                                    ^ yes, because WTF
     }
 
     SoundFragment(SoundBuffer buffer, f32 start_time, f32 volume = 1.0) : buffer{make_shared<SoundBuffer>(move(buffer))}, start_time{start_time}, volume{volume} {}

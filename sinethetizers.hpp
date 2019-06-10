@@ -21,9 +21,9 @@ SoundBuffer sinewave(f32 freq, i32 samplerate, f32 length, f32 freq_increase) {
     let window_function = make_window(length);
 
     let buffer_size = (i32)(samplerate * length);
-    if (buffer_size <= 0) throw "";
-    if (freq < 0) throw "";
-    if (freq + freq_increase < 0) throw "";
+    if (buffer_size <= 0) throw runtime_error("buffer size must be positive");
+    if (freq < 0) throw runtime_error("frequency must be positive");
+    if (freq + freq_increase < 0) throw runtime_error("frequency must be positive for the entire duration of sinewave");
 
     vector<f32> buffer;
     let freq_increment = freq_increase / buffer_size / 2.0;
@@ -115,7 +115,7 @@ SoundFragment draw_line(const Line& line, const Rectangle& boundaries, const Sou
     let boundary_size = boundaries.right_upper - boundaries.left_bottom;
     let normLine = (line - boundaries.left_bottom).map([&](let& p) { return p.norm_coords(boundary_size); });
 
-    if (normLine.from.x >= normLine.to.x + 0.001) throw "";
+    if (normLine.from.x >= normLine.to.x + 0.001) throw runtime_error("lines must always go from left to right");
 
     if (normLine.from.x >= normLine.to.x - 0.001 / sconfig.length) {
         return draw_vert_line(normLine, sconfig);
