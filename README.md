@@ -29,7 +29,7 @@ let lines = make_vector(
 Druhá možnost je si vygenerovat čáry z textu. Funkce `strings2lines` se dá `vector` řádků textu, které se mají nakreslit.
 
 ```C++
-let lines = strings2lines(make_vector<string>("Prvni radek", "druhy radek"), 1);
+let lines = strings2lines(make_vector<string_view>("Prvni radek", "druhy radek"), 1);
 ```
 
 ### Spuštění

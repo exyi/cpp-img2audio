@@ -217,7 +217,7 @@ vector<Line> single_letter2lines(char c) {
     } else throw "Not supported letter";
 }
 
-vector<Line> string2lines(string str, f32 size) {
+vector<Line> string2lines(const string_view& str, f32 size) {
     vector<Line> result;
 
     for (usize i = 0; i < str.length(); i++) {
@@ -231,7 +231,7 @@ vector<Line> string2lines(string str, f32 size) {
     return result;
 }
 
-vector<Line> strings2lines(vector<string> str, f32 size) {
+vector<Line> strings2lines(const vector<string_view>& str, f32 size) {
     vector<Line> result;
 
     for (usize i = 0; i < str.size(); i++) {

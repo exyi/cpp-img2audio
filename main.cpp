@@ -18,10 +18,10 @@ int main() {
 
     let output = "outputfile.wav";
 
-    let length_secs = 280.0;
+    let length_secs = 10.0;
     let samplerate = 48000;
-    let max_frequency = 15000.0;
-    let min_frequency = 13500.0;
+    let max_frequency = 5000.0;
+    let min_frequency = 500.0;
     let sconfig = SoundConfig(
         length_secs,
         samplerate,
@@ -38,7 +38,7 @@ int main() {
     //     // Line(Point(0.3, 0.5), Point(0.7, 0.5))
     // );
 
-    let lines = strings2lines(make_vector<string>("This placeholder text is gonna be HUGE. You could see there was text coming out of her eyes, text coming out of her wherever. We are going to make placeholder text great again. Greater than ever before."), 1);
+    let lines = strings2lines(make_vector<string_view>("nejaky", "testovaci", "vstup"), 1);
 
     // fucking_print_vector_as_this_shit_cant_do_it_on_its_own(cerr, lines);
 
