@@ -35,7 +35,7 @@ void save_waveform(const string& filename, const vector<f32>& buffer, i32 sample
         // stream << intVal;
         // cout << tmp << "\n";
         // write_to_stream(stream, (i32)intVal);
-        write_to_stream(stream, (f32)tmp);
+        write_to_stream(stream, tmp);
     }
 
 }

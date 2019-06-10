@@ -30,7 +30,7 @@ SoundBuffer sinewave(f32 freq, i32 samplerate, f32 length, f32 freq_increase) {
 
     for (i32 i = 0; i < buffer_size; ++i) // Single cycle
     {
-        f64 tmp = sin(((freq + ((f64)i * freq_increment)) * (2 * M_PI) * i) / (f64)samplerate) * 0.7 * window_function(i / (f32)samplerate);
+        f64 tmp = sin(((freq + ((f64)i * freq_increment)) * (2 * M_PI) * i) / (f64)samplerate) * 0.7 * window_function(i / samplerate);
         buffer.emplace_back(tmp);
     }
 
@@ -43,21 +43,17 @@ template<typename F>
 SoundBuffer generate_wavespectrum_(f32 min, f32 max, F frequency_amplitude, u32 samplerate, usize samplecount) {
     // cerr <<"Wavespectrum " << min << "-" << max <<"\n";
 
-    let window_function = make_window((f32)samplecount * 2 / samplerate);
+    let window_function = make_window(f32(samplecount) * 2 / samplerate);
 
     let into_freq = [=](i32 index) {
-        // let period = samplecount - index;
-        // let freq = (f32)samplerate * 70 / period;
-        let freq = samplerate / 2 * (f32)index / samplecount;
+        let freq = samplerate / 2 * f32(index) / samplecount;
         return freq;
     };
 
     let get_ampl = [&](i32 index) {
-        // if (index == 500) return 1;
-        // else return 0;
         let f = into_freq(index);
         if (f < min || f > max) return 0.0f;
-        return (f32)frequency_amplitude(f);
+        return f32(frequency_amplitude(f));
     };
 
     // cerr << "wavespectrum: " << samplerate << " " << samplecount << "\n";
@@ -65,7 +61,7 @@ SoundBuffer generate_wavespectrum_(f32 min, f32 max, F frequency_amplitude, u32 
 
     let raw_result = ifft_real_random_phase(fft_freqs);
     MUTABLE_LET_BECAUSE_CPP_COMMITTEE_ARE_IDIOTS_AND_WE_CANT_MOVE_CONST_VARS
-        f32_result = vec_mapi(raw_result, [&](let i, let a) { return (f32)a * window_function(i / (f32)samplerate); });
+        f32_result = vec_mapi(raw_result, [&](let i, let a) { return f32(a) * window_function(i / f32(samplerate)); });
     return SoundBuffer(move(f32_result));
 }
 
@@ -76,15 +72,6 @@ SoundBuffer generate_wavespectrum(f32 min, f32 max, F frequency_amplitude, i32 s
         generate_wavespectrum_(min, max, frequency_amplitude, samplerate, fragment_len);
 
     return fragment;
-
-    // let count = (i32)(length * samplerate / fragment_len);
-    // cerr << "Spectrum: iterate " << count <<"\n";
-    // MUTABLE_LET_BECAUSE_CPP_COMMITTEE_ARE_IDIOTS_AND_WE_CANT_MOVE_CONST_VARS
-        // fragments = vec_init(count, [&](let i) {
-        //                 return fragment.move_start((f32)i * fragment_len / samplerate);
-        //             });
-    //     fragments = make_vector(move(fragment));
-    // return mix_into_one(MixedSounds(move(fragments)), samplerate);
 }
 
 struct SoundConfig {
